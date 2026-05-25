@@ -1,43 +1,48 @@
 import "./style.css";
 import dayjs from "dayjs";
 
-document.getElementById("calc").addEventListener("click", () => {
-    const input = document.getElementById("birthday").value;
+document.querySelector("form").addEventListener("submit", (e) => {
+  e.preventDefault();
 
-    const [day, month] = input.split(".").map(Number);
+  const input = document.getElementById("birthday").value;
 
-    const now = dayjs();
-    const year = now.year();
+  const selectedDate = dayjs(input);
 
-    let birthday = dayjs(`${year}-${month}-${day}`, "YYYY-M-D");
-    let nextBirthday = dayjs(`${now.year()}-${month}-${day}`, "YYYY-M-D");
+  const day = selectedDate.date();
+  const month = selectedDate.month() + 1;
 
-    if (nextBirthday.isBefore(now, "day")) {
-    nextBirthday = nextBirthday.add(1, "year");
-    }
-    if (birthday.isAfter(now, "day")) {
-      birthday = birthday.subtract(1, "year");
-    }
+  const now = dayjs();
+  const year = now.year();
 
-    const diffDays = now.diff(birthday, "day");
-    const diffWeeks = nextBirthday.diff(now, "week");
-    
-    if (diffDays == 0) {
-      alert("Wszystkiego najlepszego!");
-      return;
-    }
+  let birthday = dayjs(`${year}-${month}-${day}`, "YYYY-M-D");
+  let nextBirthday = dayjs(`${now.year()}-${month}-${day}`, "YYYY-M-D");
 
-    if (diffWeeks == 0) {
-      document.getElementById("dialog-weeks").textContent =
-    `Masz urodziny w tym tygodniu!`;
-    } else {
-      document.getElementById("dialog-weeks").textContent =
-    `Do urodzin zostało: ${diffWeeks} tygodni`;
-    }
-    document.getElementById("dialog-days").textContent =
-    `Od urodzin minęło: ${diffDays} dni`;
+  if (nextBirthday.isBefore(now, "day")) {
+  nextBirthday = nextBirthday.add(1, "year");
+  }
+  if (birthday.isAfter(now, "day")) {
+    birthday = birthday.subtract(1, "year");
+  }
+
+  const diffDays = now.diff(birthday, "day");
+  const diffWeeks = nextBirthday.diff(now, "week");
   
-    document.getElementById("my-dialog").showModal();
+  if (diffDays == 0) {
+    alert("Wszystkiego najlepszego!");
+    return;
+  }
+
+  if (diffWeeks == 0) {
+    document.getElementById("dialog-weeks").textContent =
+  `Masz urodziny w tym tygodniu!`;
+  } else {
+    document.getElementById("dialog-weeks").textContent =
+  `Do urodzin zostało: ${diffWeeks} tygodni`;
+  }
+  document.getElementById("dialog-days").textContent =
+  `Od urodzin minęło: ${diffDays} dni`;
+
+  document.getElementById("my-dialog").showModal();
   });
 
 document.getElementById("close-x").addEventListener("click", () => {
